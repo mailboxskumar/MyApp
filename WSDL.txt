@@ -31,3 +31,5 @@ testrunner.bat -r -fC:\Sanjay\groovey\Results "C:\Users\sanjay\OneDrive - DBS Ba
 
 https://www.codeproject.com/Articles/820414/Automating-SoapUI-using-Groovy-A-Walk-Through
 https://www.codeproject.com/script/Articles/ViewDownloads.aspx?aid=820414
+https://www.soapui.org/functional-testing/validating-messages/getting-started-with-assertions.html
+
