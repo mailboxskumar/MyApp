@@ -1,0 +1,79 @@
+'####################################################################################
+'#        Main Test Function
+'#        Debug - Boolean. Equals to false if running in [Test Mode] : reporting to Quality Center
+'#        CurrentTestSet - [OTA COM Library].TestSet.
+'#        CurrentTest - [OTA COM Library].TSTest.
+'#        CurrentRun - [OTA COM Library].Run.
+' ##########################################################################################
+
+Dim SoapProjectPath : SoapProjectPath = "C:\Sanjay\groovey\CConverter-soapui-project.xml"
+Dim ResultPath : ResultPath = "C:\Sanjay\groovey\Results\"
+Dim SoapInstalPath : SoapInstalPath = "C:\Program Files\SmartBear\SoapUI-5.3.0\bin"
+
+Sub Test_Main(Debug, CurrentTestSet, CurrentTest, CurrentRun)
+
+        On Error Resume Next
+        TDOutput.Clear
+
+        Dim RepResultSoap
+        Dim iMonth, iYear, iHour, iMinutes, iSeconds
+        Dim oFSO, oFld
+
+        iMonth = Month(Now)
+        iYear = Day(Now)
+        iHour = Hour(Now)
+        iMinutes = Minute(Now)
+        iSeconds = Second(Now)
+
+        If iMonth < 10 Then iMonth = "0" & iMonth
+        If iYear < 10 Then iYear = "0" & iYear
+        If iHour < 10 Then iHour = "0" & iHour
+        If iMinutes < 10 Then iMinutes = "0" & iMinutes
+        If iSeconds < 10 Then iSeconds = "0" & iSeconds
+
+        RepResultSoap = ResultPath & Year(Now) & iMonth & iYear & "-" & iHour & iMinutes & iSeconds
+
+        Set oFSO = CreateObject("Scripting.FileSystemObject")
+        Set oFld = oFSO.CreateFolder(RepResultSoap)
+        wait(10)
+
+        doTest(RepResultSoap)
+
+        If checkTest(RepResultSoap) <> 0 Then
+                CurrentRun.Status = "Failed"
+                CurrentTest.Status = "Failed"
+        End If
+
+        If Err.Number <> 0 Then
+                TDOutput.Print "Run-time error [" & Err.Number & "] : " & Err.Description
+                If Not Debug Then
+                        CurrentRun.Status = "Failed"
+                        CurrentTest.Status = "Failed"
+                End If
+        End If
+        Set oFSO = Nothing
+        Set oFld = Nothing
+End Sub
+
+Public Function doTest(RepResultSoap)
+  Dim WshShell, URITestSet
+  URITestSet = SoapProjectPath
+  Set WshShell = CreateObject("WScript.Shell")
+  WshShell.CurrentDirectory = SoapInstalPath
+  WshShell.run "cmd /C testrunner.bat -f " & RepResultSoap & " " & URITestSet, ,true
+  Set WshShell = Nothing
+End Function
+
+
+Public Function checkTest(RepResultSoap)
+  Dim oFSO, oFl, nbFichiers
+  Set oFSO = CreateObject("Scripting.FileSystemObject")
+  nbFichiers = 0
+  If oFSO.FolderExists(RepResultSoap) Then
+    For each oFl in oFSO.GetFolder(RepResultSoap).Files
+      nbFichiers = nbFichiers + 1
+    Next
+  End If
+  checkTest = nbFichiers
+  Set oFSO = Nothing
+End Function
