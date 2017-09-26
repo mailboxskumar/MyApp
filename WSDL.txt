@@ -3,6 +3,9 @@ http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl
 
 JXL library doesnot support  .csv and .xslx formats, which is the format used by Excel-2010. hence, use Excel 97-2003 which is .xls foramatted and is supported by JXL library. or else if you want to use excel-2010, use APACHE POI(XSSFWorkbooks) instead of JXL. For using .csv format, google for CSVReader libraries.
 
+
+SOAP UI-JDBC Connection Reference
+=========================
 https://dev.mysql.com/downloads/connector/j/5.1.html  
 https://www.soapui.org/jdbc/reference/jdbc-drivers.html  
 https://www.soapui.org/jdbc/getting-started.html  
@@ -25,7 +28,6 @@ HP Technical Solutions Consultant V
 
 testrunner.bat -f C:\Sanjay\groovey\Results\20170926-161801 C:\Sanjay\groovey\CConverter-soapui-project.xml
 testrunner.bat -r -fC:\Sanjay\groovey\Results "C:\Users\sanjay\OneDrive - DBS Bank Ltd\Downloads\CConverter-soapui-project.xml"
-
 
 https://www.codeproject.com/Articles/820414/Automating-SoapUI-using-Groovy-A-Walk-Through
 https://www.codeproject.com/script/Articles/ViewDownloads.aspx?aid=820414
