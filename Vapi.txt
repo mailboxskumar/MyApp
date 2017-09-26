@@ -8,7 +8,7 @@
 
 Dim SoapProjectPath : SoapProjectPath = "C:\Sanjay\groovey\CConverter-soapui-project.xml"
 Dim ResultPath : ResultPath = "C:\Sanjay\groovey\Results\"
-Dim SoapInstalPath : SoapInstalPath = "C:\Program Files\SmartBear\SoapUI-5.3.0\bin"
+Dim SoapInstalPath : SoapInstalPath = "C:\Program Files\SmartBear\SoapUI-5.3.0\bin\"
 
 Sub Test_Main(Debug, CurrentTestSet, CurrentTest, CurrentRun)
 
@@ -60,20 +60,22 @@ Public Function doTest(RepResultSoap)
   URITestSet = SoapProjectPath
   Set WshShell = CreateObject("WScript.Shell")
   WshShell.CurrentDirectory = SoapInstalPath
-  WshShell.run "cmd /C testrunner.bat -f " & RepResultSoap & " " & URITestSet, ,true
+  strTemp = "cmd /C testrunner.bat -r -f " & RepResultSoap & " " & URITestSet
+  TDOutput.Print strTemp
+  WshShell.run "cmd /C testrunner.bat -r -f " & RepResultSoap & " " & URITestSet, ,true
   Set WshShell = Nothing
 End Function
 
 
 Public Function checkTest(RepResultSoap)
-  Dim oFSO, oFl, nbFichiers
+  Dim oFSO, oFl, intFail
   Set oFSO = CreateObject("Scripting.FileSystemObject")
-  nbFichiers = 0
+  intFail = 0
   If oFSO.FolderExists(RepResultSoap) Then
     For each oFl in oFSO.GetFolder(RepResultSoap).Files
-      nbFichiers = nbFichiers + 1
+      intFail = intFail + 1
     Next
   End If
-  checkTest = nbFichiers
+  checkTest = intFail
   Set oFSO = Nothing
 End Function
