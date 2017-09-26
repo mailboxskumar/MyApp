@@ -25,3 +25,6 @@ HP Technical Solutions Consultant V
 
 testrunner.bat -f C:\Sanjay\groovey\Results\20170926-161801 C:\Sanjay\groovey\CConverter-soapui-project.xml
 testrunner.bat -r -fC:\Sanjay\groovey\Results "C:\Users\sanjay\OneDrive - DBS Bank Ltd\Downloads\CConverter-soapui-project.xml"
+
+
+https://www.codeproject.com/Articles/820414/Automating-SoapUI-using-Groovy-A-Walk-Through
