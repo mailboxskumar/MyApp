@@ -1,7 +1,10 @@
 https://www.w3schools.com/xml/tempconvert.asmx?WSDL
 http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl
+http://webservices.daehosting.com/services/TemperatureConversions.wso?WSDL
 
 JXL library doesnot support  .csv and .xslx formats, which is the format used by Excel-2010. hence, use Excel 97-2003 which is .xls foramatted and is supported by JXL library. or else if you want to use excel-2010, use APACHE POI(XSSFWorkbooks) instead of JXL. For using .csv format, google for CSVReader libraries.
+
+https://almalm1250saastrial.saas.hpe.com/qcbin/
 
 
 SOAP UI-JDBC Connection Reference
