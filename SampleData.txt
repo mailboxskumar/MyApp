@@ -1,68 +1,113 @@
-Data
-{
-	{
-		Account = "CNPk8",
-		id = 8,
-		fullname = "John",
-		lastname = "Doe",
-		groupid  = "26",
-		artifact = "asda",
-		message = "Template1",
-	}
-	{
-		Account = "KMTY8",
-		id = 4,
-		fullname = "Jay",
-		lastname = "Sean",
-		groupid  = "24",
-		artifact = "asfas",
-		message = "Template2",
+Public Sub ParseDataFromTextFile()
+    strSheetName = "Sheet2"
+    strTextFilepath = Range("W1")
+    writeDataToExcelFile getDataFromTextFile(strTextFilepath), strSheetName
+End Sub
 
-	}
-	{
-		Account = "KMTY8",
-		id = 4,
-		fullname = "Jay",
-		lastname = "Sean",
-		groupid  = "24",
-		artifact = "asfas",
-		message = "Template2",
+Public Function getDataFromTextFile(strTextFilepath)
+    
+    Dim fso
+    Dim file
+    Dim ReadAllTextFile
+    Dim arrTestData
+    Dim intCounter
+    
+    intCounter = 0
+    Const ForReading = 1
+    
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    Set file = fso.OpenTextFile(strTextFilepath, ForReading, False)
+    
+    ReadAllTextFile = file.ReadAll
+    
+    file.Close
+  
+    ReadAllTextFile = Replace(ReadAllTextFile, Chr(34), "")
+    ReadAllTextFile = Replace(ReadAllTextFile, ",", "")
+    ReadAllTextFile = Replace(ReadAllTextFile, vbTab, "")
+    
+    intCntr = InStr(1, ReadAllTextFile, "[")
+    strLen = Len(ReadAllTextFile)
+   
+    ReadAllTextFile = Mid(ReadAllTextFile, intCntr + 1)
+    j = 1
+    For i = Len(ReadAllTextFile) To 1 Step -1
+        If Mid(ReadAllTextFile, i, 1) <> "]" Then
+            j = j + 1
+        ElseIf Mid(ReadAllTextFile, i, 1) = "]" Then
+            Exit For
+        End If
+    Next
+    
+    strLen = Len(ReadAllTextFile) - j
+    ReadAllTextFile = Left(ReadAllTextFile, strLen)
+    
+    ReadAllTextFile = Split(ReadAllTextFile, "{")
+    
+    intArrCnt = UBound(ReadAllTextFile)
+    
+    ReDim arrTestData(intArrCnt)
+    
+    For i = 0 To intArrCnt Step 1
+        If InStr(ReadAllTextFile(i), "}") > 0 Then
+            strTemp = Split(ReadAllTextFile(i), "}")(0)
+        Else
+            strTemp = ReadAllTextFile(i)
+        End If
+        
+        If strTemp <> "" And strTemp <> " " Then
+            arrTestData(intCounter) = strTemp
+            intCounter = intCounter + 1
+        End If
+    Next
+    
+    ReDim Preserve arrTestData(intCounter - 1)
+    
+    getDataFromTextFile = arrTestData
+    
+    Set file = Nothing
+    Set fso = Nothing
 
-	}
-	{
-		Account = "KMTY8",
-		id = 4,
-		fullname = "Jay",
-		lastname = "Sean",
-		groupid  = "24",
-		artifact = "asfas",
-		message = "Template2",
-	}
-	{
-		Account = "KMTY8",
-		id = 4,
-		fullname = "Jay",
-		lastname = "Sean",
-		groupid  = "24",
-		artifact = "asfas",
-		message = "Template2",
-	}
-	{
-		Account = "KMTY8",
-		id = 4,
-		fullname = "Jay",
-		lastname = "Sean",
-		groupid  = "24",
-		artifact = "asfas",
-		message = "Template2",
-	}
-	{
-		Account = "CNPk8",
-		id = 8,
-		fullname = "John",
-		lastname = "Doe",
-		groupid  = "26",
-		artifact = "asda",
-		message = "Template1",
-	}
-}
+End Function
+
+
+Public Function writeDataToExcelFile(arrTestData, strSheetName)
+    Application.DisplayAlerts = False
+    
+    Sheets(strSheetName).Select
+    
+    intRowCounter = 2
+    intColCount = 1
+    WriteExcelHeader (arrTestData(0))
+    
+    For i = 0 To UBound(arrTestData)
+        intColCount = 1
+        strValue = Split(arrTestData(i), vbNewLine)
+        For j = 0 To UBound(strValue)
+            If strValue(j) <> "" Then
+                strCurrVal = Trim(Split(strValue(j), ":")(1))
+                Cells(intRowCounter, intColCount).Value = strCurrVal
+                intColCount = intColCount + 1
+            End If
+        Next
+         intRowCounter = intRowCounter + 1
+    Next
+    
+    ActiveWorkbook.Save
+
+End Function
+
+Public Sub WriteExcelHeader(arrHeader)
+    strHeaders = Split(arrHeader, vbNewLine)
+    intColCount = 1
+    For i = 0 To UBound(strHeaders)
+        If strHeaders(i) <> "" Then
+            StrHeader = Trim(Split(strHeaders(i), ":")(0))
+            Cells(1, intColCount).Value = StrHeader
+            Cells(1, intColCount).Interior.ColorIndex = 6
+            intColCount = intColCount + 1
+        End If
+    Next
+End Sub
+
